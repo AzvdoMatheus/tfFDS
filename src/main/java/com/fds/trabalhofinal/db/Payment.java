@@ -1,21 +1,24 @@
-package com.fds.trabalhofinal.domain.models;
+package com.fds.trabalhofinal.db;
 
 import jakarta.annotation.Nullable;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 import java.util.Date;
 
-public class PaymentModel {
+@Entity
+public class Payment {
     private double pricePaid;
     private Date paymentDate;
-    private String promotionalCode;
-    private long paymentIdentificationCode;
 
-    public PaymentModel(long paymentIdentificationCode, double pricePaid, Date paymentDate, String promotionalCode) {
-        this.paymentIdentificationCode = paymentIdentificationCode;
-        this.pricePaid = pricePaid;
-        this.paymentDate = paymentDate;
-        this.promotionalCode = promotionalCode;
-    }
+    @Nullable
+    private String promotionalCode;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long paymentIdentificationCode;
 
     public long getPaymentIdentificationCode() { return paymentIdentificationCode; }
 
@@ -31,7 +34,9 @@ public class PaymentModel {
 
     public void setPaymentDate(Date paymentDate) { this.paymentDate = paymentDate; }
 
+    @Nullable
     public String getPromotionalCode() { return promotionalCode; }
 
+    @Nullable
     public void setPromotionalCode(String promotionalCode) { this.promotionalCode = promotionalCode; }
 }

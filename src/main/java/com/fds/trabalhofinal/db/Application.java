@@ -1,19 +1,20 @@
-package com.fds.trabalhofinal.domain.models;
+package com.fds.trabalhofinal.db;
 
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ApplicationModel {
+@Entity
+public class Application {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long appIdentificationCode;
     private String appName;
     private double monthlyCost;
-    private final List<SubscriptionModel> subscriptions;
 
-    public ApplicationModel(List<SubscriptionModel> subscriptions, long appIdentificationCode, String appName, double monthlyCost) {
-        this.appName = appName;
-        this.monthlyCost = monthlyCost;
-        this.appIdentificationCode = appIdentificationCode;
-        this.subscriptions = subscriptions;
-    }
+    @OneToMany(mappedBy = "application", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Subscription> subscriptions = new ArrayList<>();
 
     public long getAppIdentificationCode() {
         return appIdentificationCode;
@@ -30,7 +31,7 @@ public class ApplicationModel {
 
     public void setMonthlyCost(double monthlyCost) { this.monthlyCost = monthlyCost; }
 
-    public List<SubscriptionModel> getSubscriptions() {
+    public List<Subscription> getSubscriptions() {
         return subscriptions;
     }
 }

@@ -1,19 +1,20 @@
-package com.fds.trabalhofinal.domain.models;
+package com.fds.trabalhofinal.db;
 
+import jakarta.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ClientModel {
+@Entity
+public class Client {
     private String clientName;
     private String clientEmail;
-    private long clientIdentificationCode;
-    private final List<SubscriptionModel> subscription;
 
-    public ClientModel(List<SubscriptionModel> subscription , long clientIdentificationCode, String clientEmail, String clientName) {
-        this.clientEmail = clientEmail;
-        this.clientName = clientName;
-        this.clientIdentificationCode = clientIdentificationCode;
-        this.subscription = subscription;
-    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long clientIdentificationCode;
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Subscription> subscriptions = new ArrayList<>();
 
     public long getClientIdentificationCode() { return clientIdentificationCode; }
 
@@ -29,7 +30,7 @@ public class ClientModel {
 
     public void setClientEmail(String clientEmail) { this.clientEmail = clientEmail; }
 
-    public List<SubscriptionModel> getCurrSubscriptions() {
-        return subscription;
+    public List<Subscription> getSubscriptions() {
+        return subscriptions;
     }
 }

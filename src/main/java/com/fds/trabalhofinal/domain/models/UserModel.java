@@ -4,7 +4,8 @@ public class UserModel {
 
     private String userLoginPassword;
     private String userLoginCode;
-    public UserModel(String userLoginCode) {
+    public UserModel(String userLoginCode, String userLoginPassword) {
+        this.userLoginPassword = userLoginPassword;
         this.userLoginCode = userLoginCode;
     }
 

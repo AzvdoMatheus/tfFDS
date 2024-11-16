@@ -1,5 +1,6 @@
 package com.fds.trabalhofinal.db;
 
+import com.fds.trabalhofinal.domain.models.PaymentModel;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,4 +40,22 @@ public class Payment {
 
     @Nullable
     public void setPromotionalCode(String promotionalCode) { this.promotionalCode = promotionalCode; }
+
+    public static Payment fromPaymentModel(PaymentModel pModel) {
+        Payment payment = new Payment();
+        payment.setPaymentIdentificationCode(pModel.getPaymentIdentificationCode());
+        payment.setPricePaid(pModel.getPricePaid());
+        payment.setPaymentDate(pModel.getPaymentDate());
+        payment.setPromotionalCode(pModel.getPromotionalCode());
+        return payment;
+    }
+
+    public static PaymentModel toPaymentModel(Payment payment) {
+        PaymentModel pModel = new PaymentModel();
+        pModel.setPaymentIdentificationCode(payment.getPaymentIdentificationCode());
+        pModel.setPricePaid(payment.getPricePaid());
+        pModel.setPaymentDate(payment.getPaymentDate());
+        pModel.setPromotionalCode(payment.getPromotionalCode());
+        return pModel;
+    }
 }

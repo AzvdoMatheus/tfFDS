@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IClient_Rep extends CrudRepository<Client, Long> {
-    void ClientModel(Client client);
     Optional<Client> findByClientIdAndApplicationId(Long clientId, Long applicationId);
     List<Client> findByClientId(Long clientId);
     List<Client> findByApplicationId(Long applicationId);

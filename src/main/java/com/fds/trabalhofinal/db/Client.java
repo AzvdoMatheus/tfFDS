@@ -1,5 +1,6 @@
 package com.fds.trabalhofinal.db;
 
+import com.fds.trabalhofinal.domain.models.ClientModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,5 +33,21 @@ public class Client {
 
     public List<Subscription> getSubscriptions() {
         return subscriptions;
+    }
+
+    public static Client fromClientModel(ClientModel cModel) {
+        Client client = new Client();
+        client.setClientIdentificationCode(cModel.getClientIdentificationCode());
+        client.setClientName(cModel.getClientName());
+        client.setClientEmail(cModel.getClientEmail());
+        return client;
+    }
+
+    public static ClientModel toClientModel(Client client) {
+        ClientModel cModel = new ClientModel();
+        cModel.setClientIdentificationCode(client.getClientIdentificationCode());
+        cModel.setClientName(client.getClientName());
+        cModel.setClientEmail(client.getClientEmail());
+        return cModel;
     }
 }

@@ -1,5 +1,6 @@
 package com.fds.trabalhofinal.db;
 
+import com.fds.trabalhofinal.domain.models.ApplicationModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,5 +34,21 @@ public class Application {
 
     public List<Subscription> getSubscriptions() {
         return subscriptions;
+    }
+
+    public static Application fromApplicationModel(ApplicationModel aModel) {
+        Application app = new Application();
+        app.setAppIdentificationCode(aModel.getAppIdentificationCode());
+        app.setAppName(aModel.getAppName());
+        app.setMonthlyCost(aModel.getMonthlyCost());
+        return app;
+    }
+
+    public static ApplicationModel toApplicationModel(Application app) {
+        ApplicationModel aModel = new ApplicationModel();
+        aModel.setAppIdentificationCode(app.getAppIdentificationCode());
+        aModel.setAppName(app.getAppName());
+        aModel.setMonthlyCost(app.getMonthlyCost());
+        return aModel;
     }
 }

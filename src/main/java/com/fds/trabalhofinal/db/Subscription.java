@@ -1,5 +1,6 @@
 package com.fds.trabalhofinal.db;
 
+import com.fds.trabalhofinal.domain.models.SubscriptionModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -49,5 +50,21 @@ public class Subscription {
 
     public List<Payment> getPayments() {
         return payments;
+    }
+
+    public static Subscription fromSubscriptionModel(SubscriptionModel sModel) {
+        Subscription subscription = new Subscription();
+        subscription.setSubscriptionIdentificationCode(sModel.getSubscriptionIdentificationCode());
+        subscription.setSubscriptionDate(sModel.getSubscriptionDate());
+        subscription.setSubscriptionStatus(sModel.getSubscriptionStatus());
+        return subscription;
+    }
+
+    public static SubscriptionModel toSubscriptionModel(Subscription subscription) {
+        SubscriptionModel sModel = new SubscriptionModel();
+        sModel.setSubscriptionIdentificationCode(subscription.getSubscriptionIdentificationCode());
+        sModel.setSubscriptionDate(subscription.getSubscriptionDate());
+        sModel.setSubscriptionStatus(subscription.getSubscriptionStatus());
+        return sModel;
     }
 }

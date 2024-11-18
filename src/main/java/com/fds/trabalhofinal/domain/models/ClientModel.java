@@ -23,13 +23,13 @@ public class ClientModel {
 
     public String getClientName() { return clientName; }
 
-    public void setClientName(String clientName) { this.clientName = clientName; }
+   public void setClientName(String clientName) { this.clientName = clientName; }
 
     public String getClientEmail() { return clientEmail; }
 
     public void setClientEmail(String clientEmail) { this.clientEmail = clientEmail; }
 
-    public List<SubscriptionModel> getCurrSubscriptions() {
+    public List<SubscriptionModel> getClientCurrSubscriptions() {
         return subscription;
     }
 }

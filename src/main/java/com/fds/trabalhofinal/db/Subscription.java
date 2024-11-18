@@ -1,10 +1,12 @@
 package com.fds.trabalhofinal.db;
 
+import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
 import com.fds.trabalhofinal.domain.models.SubscriptionModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Subscription {
@@ -14,6 +16,7 @@ public class Subscription {
     private long subscriptionIdentificationCode;
     private Date planStart;
     private Date planEnd;
+    private SubscriptionStatus status;
 
     @ManyToOne
     private Client client;
@@ -40,6 +43,10 @@ public class Subscription {
 
     public void setPlanEnd(Date planEnd) { this.planEnd = planEnd; }
 
+    public SubscriptionStatus getStatus() { return status; }
+
+    public void setStatus(SubscriptionStatus status) { this.status = status; }
+
     public Client getClient() { return client; }
 
     public void setClient(Client client) { this.client = client; }
@@ -55,16 +62,20 @@ public class Subscription {
     public static Subscription fromSubscriptionModel(SubscriptionModel sModel) {
         Subscription subscription = new Subscription();
         subscription.setSubscriptionIdentificationCode(sModel.getSubscriptionIdentificationCode());
-        subscription.setSubscriptionDate(sModel.getSubscriptionDate());
-        subscription.setSubscriptionStatus(sModel.getSubscriptionStatus());
+        subscription.setPlanStart(sModel.getPlanStart());
+        subscription.setPlanEnd(sModel.getPlanEnd());
+        subscription.setStatus(sModel.getStatus());
         return subscription;
     }
 
     public static SubscriptionModel toSubscriptionModel(Subscription subscription) {
-        SubscriptionModel sModel = new SubscriptionModel();
-        sModel.setSubscriptionIdentificationCode(subscription.getSubscriptionIdentificationCode());
-        sModel.setSubscriptionDate(subscription.getSubscriptionDate());
-        sModel.setSubscriptionStatus(subscription.getSubscriptionStatus());
-        return sModel;
+        return new SubscriptionModel(
+                subscription.getPayments().stream()
+                        .map(Payment::toPaymentModel)
+                        .collect(Collectors.toList()),
+                subscription.getSubscriptionIdentificationCode(),
+                subscription.getPlanEnd(),
+                subscription.getPlanStart()
+        );
     }
 }

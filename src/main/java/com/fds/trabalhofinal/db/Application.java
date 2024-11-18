@@ -4,6 +4,7 @@ import com.fds.trabalhofinal.domain.models.ApplicationModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Application {
@@ -45,10 +46,13 @@ public class Application {
     }
 
     public static ApplicationModel toApplicationModel(Application app) {
-        ApplicationModel aModel = new ApplicationModel();
-        aModel.setAppIdentificationCode(app.getAppIdentificationCode());
-        aModel.setAppName(app.getAppName());
-        aModel.setMonthlyCost(app.getMonthlyCost());
-        return aModel;
+        return new ApplicationModel(
+                app.getSubscriptions().stream()
+                        .map(Subscription::toSubscriptionModel)
+                        .collect(Collectors.toList()),
+                app.getAppIdentificationCode(),
+                app.getAppName(),
+                app.getMonthlyCost()
+        );
     }
 }

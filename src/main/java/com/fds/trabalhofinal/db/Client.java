@@ -4,6 +4,7 @@ import com.fds.trabalhofinal.domain.models.ClientModel;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 public class Client {
@@ -44,10 +45,13 @@ public class Client {
     }
 
     public static ClientModel toClientModel(Client client) {
-        ClientModel cModel = new ClientModel();
-        cModel.setClientIdentificationCode(client.getClientIdentificationCode());
-        cModel.setClientName(client.getClientName());
-        cModel.setClientEmail(client.getClientEmail());
-        return cModel;
+        return new ClientModel(
+                client.getSubscriptions().stream()
+                        .map(Subscription::toSubscriptionModel)
+                        .collect(Collectors.toList()),
+                client.getClientIdentificationCode(),
+                client.getClientEmail(),
+                client.getClientName()
+        );
     }
 }

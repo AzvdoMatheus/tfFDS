@@ -3,8 +3,10 @@ package com.fds.trabalhofinal.domain.models;
 public class UserModel {
 
     private String userLoginPassword;
+    private long userIdentificationCode;
     private String userLoginCode;
-    public UserModel(String userLoginCode, String userLoginPassword) {
+    public UserModel(long userIdentificationCode, String userLoginCode, String userLoginPassword) {
+        this.userIdentificationCode = userIdentificationCode;
         this.userLoginPassword = userLoginPassword;
         this.userLoginCode = userLoginCode;
     }
@@ -17,5 +19,13 @@ public class UserModel {
 
     public void setUserLoginPassword(String userLoginPassword) {
         this.userLoginPassword = userLoginPassword;
+    }
+
+    public long getUserIdentificationCode() {
+        return userIdentificationCode;
+    }
+
+    public void setUserIdentificationCode(long userIdentificationCode) {
+        this.userIdentificationCode = userIdentificationCode;
     }
 }

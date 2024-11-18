@@ -17,12 +17,15 @@ public class User {
 
     public User() {
     }
-
-    public User(String userLoginCode, String userLoginPassword) {
+    public User(long userIdentificationCode, String userLoginCode, String userLoginPassword) {
+        this.userIdentificationCode = userIdentificationCode;
         this.userLoginCode = userLoginCode;
         this.userLoginPassword = userLoginPassword;
     }
 
+    public void setUserIdentificationCode(long userIdentificationCode) {
+        this.userIdentificationCode = userIdentificationCode;
+    }
     public long getUserIdentificationCode() {
         return userIdentificationCode;
     }
@@ -52,10 +55,10 @@ public class User {
     }
 
     public static UserModel toUserModel(User user) {
-        UserModel uModel = new UserModel();
-        uModel.setUserIdentificationCode(user.getUserIdentificationCode());
-        uModel.setUserLoginCode(user.getUserLoginCode());
-        uModel.setUserLoginPassword(user.getUserLoginPassword());
-        return uModel;
+        return new UserModel(
+                user.getUserIdentificationCode(),
+                user.getUserLoginCode(),
+                user.getUserLoginPassword()
+        );
     }
 }

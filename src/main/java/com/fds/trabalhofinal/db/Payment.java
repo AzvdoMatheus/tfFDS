@@ -51,11 +51,11 @@ public class Payment {
     }
 
     public static PaymentModel toPaymentModel(Payment payment) {
-        PaymentModel pModel = new PaymentModel();
-        pModel.setPaymentIdentificationCode(payment.getPaymentIdentificationCode());
-        pModel.setPricePaid(payment.getPricePaid());
-        pModel.setPaymentDate(payment.getPaymentDate());
-        pModel.setPromotionalCode(payment.getPromotionalCode());
-        return pModel;
+        return new PaymentModel(
+                payment.getPaymentIdentificationCode(),
+                payment.getPricePaid(),
+                payment.getPaymentDate(),
+                payment.getPromotionalCode()
+        );
     }
 }

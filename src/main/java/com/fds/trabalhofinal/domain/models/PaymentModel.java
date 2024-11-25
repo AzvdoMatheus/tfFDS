@@ -1,16 +1,17 @@
 package com.fds.trabalhofinal.domain.models;
 
-import jakarta.annotation.Nullable;
-
-import java.util.Date;
+import java.time.LocalDate;
 
 public class PaymentModel {
-    private double pricePaid;
-    private Date paymentDate;
-    private String promotionalCode;
-    private long paymentIdentificationCode;
+    private final long paymentIdentificationCode;
+    private final double pricePaid;
+    private final LocalDate paymentDate;
+    private final String promotionalCode;
 
-    public PaymentModel(long paymentIdentificationCode, double pricePaid, Date paymentDate, String promotionalCode) {
+    public PaymentModel(long paymentIdentificationCode, double pricePaid, LocalDate paymentDate, String promotionalCode) {
+        if (pricePaid <= 0) {
+            throw new IllegalArgumentException("Price paid must be greater than zero.");
+        }
         this.paymentIdentificationCode = paymentIdentificationCode;
         this.pricePaid = pricePaid;
         this.paymentDate = paymentDate;
@@ -19,19 +20,9 @@ public class PaymentModel {
 
     public long getPaymentIdentificationCode() { return paymentIdentificationCode; }
 
-    public void setPaymentIdentificationCode(long paymentIdentificationCode) {
-        this.paymentIdentificationCode = paymentIdentificationCode;
-    }
-
     public double getPricePaid() { return pricePaid; }
 
-    public void setPricePaid(double pricePaid) { this.pricePaid = pricePaid; }
-
-    public Date getPaymentDate() { return paymentDate; }
-
-    public void setPaymentDate(Date paymentDate) { this.paymentDate = paymentDate; }
+    public LocalDate getPaymentDate() { return paymentDate; }
 
     public String getPromotionalCode() { return promotionalCode; }
-
-    public void setPromotionalCode(String promotionalCode) { this.promotionalCode = promotionalCode; }
 }

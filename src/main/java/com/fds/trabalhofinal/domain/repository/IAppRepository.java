@@ -8,7 +8,6 @@ public interface IAppRepository {
     List<ApplicationModel> findAll();
     Optional<ApplicationModel> findById(Long id);
 
-    // cadastra um novo aplicativo
-    ApplicationModel addNewApplication(ApplicationModel application);
-    void updateMonthlyCost(Long id, Double newMonthlyCost);
+    ApplicationModel save(ApplicationModel application);
+    void updateMonthlyCost(Long id, double newMonthlyCost);
 }

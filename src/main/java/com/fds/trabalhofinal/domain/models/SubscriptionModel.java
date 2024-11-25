@@ -1,44 +1,61 @@
 package com.fds.trabalhofinal.domain.models;
 
 import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
-import java.util.Date;
-import java.util.List;
+
+import java.time.LocalDate;
 
 public class SubscriptionModel {
-    private long subscriptionIdentificationCode;
-    private Date planStart;
-    private Date planEnd;
+    private final long subscriptionIdentificationCode;
+    private LocalDate planStart;
+    private LocalDate planEnd;
     private SubscriptionStatus status;
-    private final List<PaymentModel> payments;
 
-    public SubscriptionModel(List<PaymentModel> payments, long subscriptionIdentificationCode, Date planEnd, Date planStart) {
+    public SubscriptionModel(long subscriptionIdentificationCode, LocalDate start, LocalDate planStart, SubscriptionStatus status) {
         this.subscriptionIdentificationCode = subscriptionIdentificationCode;
-        this.planEnd = planEnd;
         this.planStart = planStart;
-        this.status = SubscriptionStatus.INACTIVE;
-        this.payments = payments;
+        this.planEnd = planStart.plusDays(7);
+        this.status = SubscriptionStatus.ACTIVE;
     }
+
     public long getSubscriptionIdentificationCode() {
         return subscriptionIdentificationCode;
     }
 
-    public void setSubscriptionIdentificationCode(long subscriptionIdentificationCode) {
-        this.subscriptionIdentificationCode = subscriptionIdentificationCode;
-    }
+    public LocalDate getPlanStart() { return planStart; }
 
-    public Date getPlanStart() { return planStart; }
-
-    public void setPlanStart(Date planStart) { this.planStart = planStart; }
-
-    public Date getPlanEnd() { return planEnd; }
-
-    public void setPlanEnd(Date planEnd) { this.planEnd = planEnd; }
+    public LocalDate getPlanEnd() { return planEnd; }
 
     public SubscriptionStatus getStatus() { return status; }
 
-    public void setStatus(SubscriptionStatus status) { this.status = status; }
+    public void setPlanStart(LocalDate planStart) {
+        this.planStart = planStart;
+    }
 
-    public List<PaymentModel> getPayments() {
-        return payments;
+    public void setPlanEnd(LocalDate planEnd) {
+        this.planEnd = planEnd;
+    }
+
+    public void setStatus(SubscriptionStatus status) {
+        this.status = status;
+    }
+
+    public void extendValidity(int days) {
+        if (days <= 0) {
+            throw new IllegalArgumentException("Extension days must be positive.");
+        }
+        if (status == SubscriptionStatus.ACTIVE) {
+            this.planEnd = planEnd.plusDays(days);
+        } else {
+            this.planEnd = LocalDate.now().plusDays(days);
+            this.status = SubscriptionStatus.ACTIVE;
+        }
+    }
+
+    public void cancel() {
+        this.status = SubscriptionStatus.INACTIVE;
+    }
+
+    public boolean isActive() {
+        return status == SubscriptionStatus.ACTIVE && planEnd.isAfter(LocalDate.now());
     }
 }

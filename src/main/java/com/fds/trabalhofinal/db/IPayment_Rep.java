@@ -1,6 +1,7 @@
 package com.fds.trabalhofinal.db;
 
 import org.springframework.data.repository.CrudRepository;
+import com.fds.trabalhofinal.persistence.Payment;
 
 import java.util.Date;
 import java.util.List;

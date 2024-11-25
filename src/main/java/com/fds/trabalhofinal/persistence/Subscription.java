@@ -10,28 +10,30 @@ import java.util.List;
 public class Subscription {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long subscriptionIdentificationCode;
+    @Column(name = "subscription_identification_code", nullable = false)
+    private Long subscriptionIdentificationCode;
 
+    @Column(name = "plan_start", nullable = false)
     private LocalDate planStart;
 
+    @Column(name = "plan_end", nullable = false)
     private LocalDate planEnd;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private SubscriptionStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
-
     @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payments;
 
-    // Getters e Setters
+
     public long getSubscriptionIdentificationCode() {
         return subscriptionIdentificationCode;
     }

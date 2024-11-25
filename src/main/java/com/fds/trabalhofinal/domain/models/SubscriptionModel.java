@@ -5,7 +5,7 @@ import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
 import java.time.LocalDate;
 
 public class SubscriptionModel {
-    private final long subscriptionIdentificationCode;
+    private long subscriptionIdentificationCode;
     private LocalDate planStart;
     private LocalDate planEnd;
     private SubscriptionStatus status;
@@ -17,6 +17,7 @@ public class SubscriptionModel {
         this.status = SubscriptionStatus.ACTIVE;
     }
 
+    public SubscriptionModel() { }
     public long getSubscriptionIdentificationCode() {
         return subscriptionIdentificationCode;
     }

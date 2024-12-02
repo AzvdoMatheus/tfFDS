@@ -21,12 +21,11 @@ public class PaymentController {
 
     @PostMapping
     public ResponseEntity<PaymentModel> registerPayment(
-            @RequestParam Long subscriptionId,
             @RequestParam double pricePaid,
             @RequestParam double monthlyCost,
             @RequestParam(required = false) String promotionalCode) {
 
-        PaymentModel payment = paymentServices.registerPayment(subscriptionId, pricePaid, monthlyCost, promotionalCode);
+        PaymentModel payment = paymentServices.registerPayment(pricePaid, monthlyCost, promotionalCode);
         return ResponseEntity.ok(payment);
     }
 

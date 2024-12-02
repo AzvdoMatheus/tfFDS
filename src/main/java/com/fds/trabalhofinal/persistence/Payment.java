@@ -24,7 +24,8 @@ public class Payment {
     @JoinColumn(name = "subscription_id", nullable = false)
     private Subscription subscription;
 
-    // Getters e Setters
+    protected Payment() { }
+
     public long getPaymentIdentificationCode() {
         return paymentIdentificationCode;
     }
@@ -68,7 +69,6 @@ public class Payment {
 
     public static Payment fromPaymentModel(PaymentModel pModel) {
         Payment payment = new Payment();
-        payment.setPaymentIdentificationCode(pModel.getPaymentIdentificationCode());
         payment.setPricePaid(pModel.getPricePaid());
         payment.setPaymentDate(pModel.getPaymentDate());
         payment.setPromotionalCode(pModel.getPromotionalCode());
@@ -77,7 +77,6 @@ public class Payment {
 
     public static PaymentModel toPaymentModel(Payment payment) {
         return new PaymentModel(
-                payment.getPaymentIdentificationCode(),
                 payment.getPricePaid(),
                 payment.getPaymentDate(),
                 payment.getPromotionalCode()

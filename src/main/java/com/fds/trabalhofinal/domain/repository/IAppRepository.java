@@ -7,7 +7,5 @@ import com.fds.trabalhofinal.domain.models.ApplicationModel;
 public interface IAppRepository {
     List<ApplicationModel> findAll();
     Optional<ApplicationModel> findById(Long id);
-
     ApplicationModel save(ApplicationModel application);
-    void updateMonthlyCost(Long id, double newMonthlyCost);
 }

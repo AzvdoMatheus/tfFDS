@@ -5,21 +5,25 @@ import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
 import java.time.LocalDate;
 
 public class SubscriptionModel {
-    private long subscriptionIdentificationCode;
     private LocalDate planStart;
     private LocalDate planEnd;
     private SubscriptionStatus status;
+    private ApplicationModel application;
+    private ClientModel client;
+    private Long subscriptionIdentificationCode;
 
-    public SubscriptionModel(long subscriptionIdentificationCode, LocalDate start, LocalDate planStart, SubscriptionStatus status) {
+    public SubscriptionModel(Long subscriptionIdentificationCode, LocalDate planStart, LocalDate planEnd, SubscriptionStatus status) {
         this.subscriptionIdentificationCode = subscriptionIdentificationCode;
         this.planStart = planStart;
         this.planEnd = planStart.plusDays(7);
         this.status = SubscriptionStatus.ACTIVE;
     }
 
-    public SubscriptionModel() { }
-    public long getSubscriptionIdentificationCode() {
+    public Long getSubscriptionIdentificationCode() {
         return subscriptionIdentificationCode;
+    }
+
+    public SubscriptionModel() {
     }
 
     public LocalDate getPlanStart() { return planStart; }
@@ -40,6 +44,22 @@ public class SubscriptionModel {
         this.status = status;
     }
 
+    public ClientModel getClient() {
+        return client;
+    }
+
+    public void setClient(ClientModel client) {
+        this.client = client;
+    }
+
+    public ApplicationModel getApplication() {
+        return application;
+    }
+
+    public void setApplication(ApplicationModel application) {
+        this.application = application;
+    }
+
     public void extendValidity(int days) {
         if (days <= 0) {
             throw new IllegalArgumentException("Extension days must be positive.");
@@ -51,11 +71,9 @@ public class SubscriptionModel {
             this.status = SubscriptionStatus.ACTIVE;
         }
     }
-
     public void cancel() {
         this.status = SubscriptionStatus.INACTIVE;
     }
-
     public boolean isActive() {
         return status == SubscriptionStatus.ACTIVE && planEnd.isAfter(LocalDate.now());
     }

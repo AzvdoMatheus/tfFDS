@@ -9,19 +9,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class IClient_JPA implements IClientRepository {
     private final IClient_Rep clientRep;
-
     public IClient_JPA(IClient_Rep clientRep) {
         this.clientRep = clientRep;
     }
 
     @Override
     public List<ClientModel> findAll() {
-        return StreamSupport.stream(clientRep.findAll().spliterator(), false)
+        return clientRep.findAll().stream()
                 .map(Client::toClientModel)
                 .collect(Collectors.toList());
     }

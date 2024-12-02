@@ -9,12 +9,9 @@ import java.util.Optional;
 
 public interface ISubscriptionRepository {
     SubscriptionModel save(SubscriptionModel subscription);
-
     List<SubscriptionModel> findAll();
-    Optional<SubscriptionModel> findByClientIdAndApplicationId(Long clientId, Long applicationId);
     List<SubscriptionModel> findByClientId(Long clientId);
-    List<SubscriptionModel> findByApplicationId(Long appId);
     Optional<SubscriptionModel> findById(Long subscriptionId);
     List<SubscriptionModel> findByStatus(SubscriptionStatus status);
-    public List<Map<String, Object>> getSubscriptionsByClientId(Long clientId);
+
 }

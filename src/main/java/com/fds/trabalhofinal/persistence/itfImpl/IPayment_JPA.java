@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 public class IPayment_JPA implements IPaymentRepository {
 
     private final IPayment_Rep paymentRep;
-
     public IPayment_JPA(IPayment_Rep paymentRep) { this.paymentRep = paymentRep; }
 
     @Override
@@ -29,6 +28,4 @@ public class IPayment_JPA implements IPaymentRepository {
                 .map(Payment::toPaymentModel)
                 .collect(Collectors.toList());
     }
-
-
 }

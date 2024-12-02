@@ -12,16 +12,17 @@ public class Application {
     private long appIdentificationCode;
 
     private String appName;
-
     private double monthlyCost;
 
     public long getAppIdentificationCode() {
         return appIdentificationCode;
     }
 
-    public void setAppIdentificationCode(long appIdentificationCode) {
+    public void setAppIdentificationCode(Long appIdentificationCode) {
         this.appIdentificationCode = appIdentificationCode;
     }
+
+    protected Application() { }
 
     public String getAppName() {
         return appName;
@@ -41,7 +42,6 @@ public class Application {
 
     public static Application fromApplicationModel(ApplicationModel aModel) {
         Application app = new Application();
-        app.setAppIdentificationCode(aModel.getAppIdentificationCode());
         app.setAppName(aModel.getAppName());
         app.setMonthlyCost(aModel.getMonthlyCost());
         return app;
@@ -49,7 +49,6 @@ public class Application {
 
     public static ApplicationModel toApplicationModel(Application app) {
         return new ApplicationModel(
-                app.getAppIdentificationCode(),
                 app.getAppName(),
                 app.getMonthlyCost()
         );

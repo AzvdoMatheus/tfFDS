@@ -10,35 +10,37 @@ import java.util.List;
 public class Subscription {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "subscription_identification_code", nullable = false)
     private Long subscriptionIdentificationCode;
 
-    @Column(name = "plan_start", nullable = false)
+    @Column(name = "plan_start")
     private LocalDate planStart;
 
-    @Column(name = "plan_end", nullable = false)
+    @Column(name = "plan_end")
     private LocalDate planEnd;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false)
+    @Column(name = "status")
     private SubscriptionStatus status;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "application_id", nullable = false)
     private Application application;
-    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "subscription", cascade = CascadeType.ALL)
     private List<Payment> payments;
 
+    public Subscription() { }
 
-    public long getSubscriptionIdentificationCode() {
+    public Long getSubscriptionIdentificationCode() {
         return subscriptionIdentificationCode;
     }
-
-    public void setSubscriptionIdentificationCode(long subscriptionIdentificationCode) {
+    public void setSubscriptionIdentificationCode(Long subscriptionIdentificationCode) {
         this.subscriptionIdentificationCode = subscriptionIdentificationCode;
     }
 
@@ -90,21 +92,23 @@ public class Subscription {
         this.payments = payments;
     }
 
-    public static Subscription fromSubscriptionModel(SubscriptionModel sModel) {
+    public static Subscription fromSubscriptionModel(SubscriptionModel model) {
         Subscription subscription = new Subscription();
-        subscription.setSubscriptionIdentificationCode(sModel.getSubscriptionIdentificationCode());
-        subscription.setPlanStart(sModel.getPlanStart());
-        subscription.setPlanEnd(sModel.getPlanEnd());
-        subscription.setStatus(sModel.getStatus());
+        subscription.setPlanStart(model.getPlanStart());
+        subscription.setPlanEnd(model.getPlanEnd());
+        subscription.setStatus(model.getStatus());
+        subscription.setClient(Client.fromClientModel(model.getClient()));
+        subscription.setApplication(Application.fromApplicationModel(model.getApplication()));
         return subscription;
     }
 
     public static SubscriptionModel toSubscriptionModel(Subscription subscription) {
-        return new SubscriptionModel(
-                subscription.getSubscriptionIdentificationCode(),
-                subscription.getPlanStart(),
-                subscription.getPlanEnd(),
-                subscription.getStatus()
-        );
+        SubscriptionModel model = new SubscriptionModel();
+        model.setPlanStart(subscription.getPlanStart());
+        model.setPlanEnd(subscription.getPlanEnd());
+        model.setStatus(subscription.getStatus());
+        model.setClient(Client.toClientModel(subscription.getClient()));
+        model.setApplication(Application.toApplicationModel(subscription.getApplication()));
+        return model;
     }
 }

@@ -1,9 +1,13 @@
 package com.fds.trabalhofinal.controllers;
 
+import com.fds.trabalhofinal.controllers.DTOS.SubscriptionRequest;
+import com.fds.trabalhofinal.controllers.DTOS.SubscriptionResponse;
 import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
 import com.fds.trabalhofinal.domain.models.ClientModel;
+import com.fds.trabalhofinal.domain.models.PaymentModel;
 import com.fds.trabalhofinal.domain.models.SubscriptionModel;
 import com.fds.trabalhofinal.services.useCases.ClientServices;
+import com.fds.trabalhofinal.services.useCases.PaymentServices;
 import com.fds.trabalhofinal.services.useCases.SubscriptionServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +23,10 @@ import java.util.Map;
 public class SubscriptionController {
 
     private final SubscriptionServices subscriptionServices;
-    private final ClientServices clientServices;
 
     @Autowired
-    public SubscriptionController(SubscriptionServices subscriptionServices, ClientServices clientServices) {
+    public SubscriptionController(SubscriptionServices subscriptionServices) {
         this.subscriptionServices = subscriptionServices;
-        this.clientServices = clientServices;
     }
 
     @GetMapping("/subscriptions")
@@ -38,36 +40,15 @@ public class SubscriptionController {
                 .orElseThrow(() -> new IllegalArgumentException("Subscription not found."));
     }
 
-    @PostMapping("/subscriptions/new/")
-    public ResponseEntity<Map<String, Object>> createSubscription(
-            @RequestParam Long clientId,
-            @RequestParam Long applicationId) {
-
-        SubscriptionModel createdSubscription = subscriptionServices.createSubscription(clientId, applicationId);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("subscriptionId", createdSubscription.getSubscriptionIdentificationCode());
-        response.put("planStart", createdSubscription.getPlanStart());
-        response.put("planEnd", createdSubscription.getPlanEnd());
-
-        return ResponseEntity.ok(response);
-    }
-
     @PostMapping("/subscriptions/{id}/cancel")
-    public String cancelSubscription(@PathVariable Long id) {
-        subscriptionServices.cancelSubscription(id);
-        return "Subscription canceled successfully.";
+    public ResponseEntity<SubscriptionResponse> cancelSubscription(@PathVariable Long id) {
+        SubscriptionResponse responseDTO = subscriptionServices.cancelSubscription(id);
+        return ResponseEntity.ok(responseDTO);
     }
-
-    @GetMapping("/subscriptions/info/{clientId}")
-    public ResponseEntity<List<Map<String, Object>>> getSubscriptionsByClient(@PathVariable Long clientId) {
-        List<Map<String, Object>> subscriptions = subscriptionServices.getSubscriptionsByClientId(clientId);
-
-        if (subscriptions.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(subscriptions);
+    @PostMapping("/subscriptions/new")
+    public ResponseEntity<SubscriptionResponse> createSubscription(@RequestBody SubscriptionRequest requestDTO) {
+        SubscriptionResponse responseDTO = subscriptionServices.createSubscription(requestDTO);
+        return ResponseEntity.ok(responseDTO);
     }
 
     @GetMapping("/subscriptions/status/{status}")

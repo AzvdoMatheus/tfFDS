@@ -13,15 +13,15 @@ public class User {
     private String userLoginPassword;
     private String userLoginCode;
 
-    public User() {
-    }
     public User(long userIdentificationCode, String userLoginCode, String userLoginPassword) {
         this.userIdentificationCode = userIdentificationCode;
         this.userLoginCode = userLoginCode;
         this.userLoginPassword = userLoginPassword;
     }
 
-    public void setUserIdentificationCode(long userIdentificationCode) {
+    protected User() { }
+
+    public void setUserIdentificationCode(Long userIdentificationCode) {
         this.userIdentificationCode = userIdentificationCode;
     }
     public long getUserIdentificationCode() {
@@ -46,7 +46,6 @@ public class User {
 
     public static User fromUserModel(UserModel uModel) {
         User user = new User();
-        user.setUserIdentificationCode(uModel.getUserIdentificationCode());
         user.setUserLoginCode(uModel.getUserLoginCode());
         user.setUserLoginPassword(uModel.getUserLoginPassword());
         return user;
@@ -54,7 +53,6 @@ public class User {
 
     public static UserModel toUserModel(User user) {
         return new UserModel(
-                user.getUserIdentificationCode(),
                 user.getUserLoginCode(),
                 user.getUserLoginPassword()
         );

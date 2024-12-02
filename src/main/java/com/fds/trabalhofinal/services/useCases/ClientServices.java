@@ -19,8 +19,7 @@ public class ClientServices {
     }
 
     public ClientModel createClient(String clientName, String clientEmail) {
-        long clientId = System.currentTimeMillis();
-        ClientModel newClient = new ClientModel(clientId, clientName, clientEmail);
+        ClientModel newClient = new ClientModel(clientName, clientEmail);
         return clientRepository.save(newClient);
     }
 

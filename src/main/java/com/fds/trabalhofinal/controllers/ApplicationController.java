@@ -19,18 +19,6 @@ public class ApplicationController {
         this.applicationServices = applicationServices;
     }
 
-    @PostMapping
-    public ResponseEntity<ApplicationModel> createApplication(@RequestParam String appName, @RequestParam double monthlyCost) {
-        ApplicationModel application = applicationServices.createApplication(appName, monthlyCost);
-        return ResponseEntity.ok(application);
-    }
-
-    @PutMapping("/{id}/monthly-cost")
-    public ResponseEntity<Void> updateMonthlyCost(@PathVariable Long id, @RequestParam double newMonthlyCost) {
-        applicationServices.updateMonthlyCost(id, newMonthlyCost);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping
     public ResponseEntity<List<ApplicationModel>> listAllApplications() {
         List<ApplicationModel> applications = applicationServices.listAllApplications();

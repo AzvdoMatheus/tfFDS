@@ -1,5 +1,6 @@
 package com.fds.trabalhofinal.services.useCases;
 
+import com.fds.trabalhofinal.controllers.DTOS.SubscriptionRequest;
 import com.fds.trabalhofinal.domain.enums.SubscriptionStatus;
 import com.fds.trabalhofinal.domain.models.ApplicationModel;
 import com.fds.trabalhofinal.domain.models.ClientModel;
@@ -7,6 +8,10 @@ import com.fds.trabalhofinal.domain.models.SubscriptionModel;
 import com.fds.trabalhofinal.domain.repository.IAppRepository;
 import com.fds.trabalhofinal.domain.repository.IClientRepository;
 import com.fds.trabalhofinal.domain.repository.ISubscriptionRepository;
+import com.fds.trabalhofinal.controllers.DTOS.SubscriptionResponse;
+import com.fds.trabalhofinal.persistence.Application;
+import com.fds.trabalhofinal.persistence.Client;
+import com.fds.trabalhofinal.persistence.Subscription;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,43 +44,45 @@ public class SubscriptionServices {
         return subscriptionRepository.findByStatus(status);
     }
 
-    public SubscriptionModel createSubscription(Long clientId, Long applicationId) {
-        ClientModel client = clientRepository.findById(clientId)
-                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
-
-        ApplicationModel application = applicationRepository.findById(applicationId)
-                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
-
-        SubscriptionModel subscriptionModel = new SubscriptionModel();
-        subscriptionModel.setPlanStart(LocalDate.now());
-        subscriptionModel.setPlanEnd(LocalDate.now().plusDays(37));
-        subscriptionModel.setStatus(SubscriptionStatus.ACTIVE);
-
-        return subscriptionRepository.save(subscriptionModel);
-    }
-
-    public void cancelSubscription(Long subscriptionId) {
-        SubscriptionModel subscription = subscriptionRepository.findById(subscriptionId)
+    public SubscriptionResponse cancelSubscription(Long subscriptionId) {
+        SubscriptionModel subscriptionModel = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
+
+        Subscription subscription = Subscription.fromSubscriptionModel(subscriptionModel);
 
         subscription.setStatus(SubscriptionStatus.CANCELED);
 
-        subscriptionRepository.save(subscription);
+        SubscriptionModel updatedSubscriptionModel = subscriptionRepository.save(Subscription.toSubscriptionModel(subscription));
+
+        return new SubscriptionResponse(
+                updatedSubscriptionModel.getSubscriptionIdentificationCode(),
+                updatedSubscriptionModel.getPlanStart(),
+                updatedSubscriptionModel.getPlanEnd(),
+                updatedSubscriptionModel.getStatus().toString()
+        );
     }
 
-    public List<Map<String, Object>> getSubscriptionsByClientId(Long clientId) {
-        List<SubscriptionModel> subscriptions = subscriptionRepository.findByClientId(clientId);
+    public SubscriptionResponse createSubscription(SubscriptionRequest requestDTO) {
+        ClientModel clientModel = clientRepository.findById(requestDTO.getClientId())
+                .orElseThrow(() -> new IllegalArgumentException("Client not found"));
+        ApplicationModel applicationModel = applicationRepository.findById(requestDTO.getApplicationId())
+                .orElseThrow(() -> new IllegalArgumentException("Application not found"));
 
-        return subscriptions.stream()
-                .map(subscription -> {
-                    Map<String, Object> subscriptionData = new HashMap<>();
-                    subscriptionData.put("codigoAssinatura", subscription.getSubscriptionIdentificationCode());
-                    subscriptionData.put("dataInicio", subscription.getPlanStart());
-                    subscriptionData.put("dataFim", subscription.getPlanEnd());
-                    subscriptionData.put("status", subscription.getStatus() == SubscriptionStatus.ACTIVE ? "ACTIVE" : "CANCELED");
-                    return subscriptionData;
-                })
-                .collect(Collectors.toList());
+        Subscription subscription = new Subscription();
+        subscription.setPlanStart(LocalDate.now());
+        subscription.setPlanEnd(LocalDate.now().plusDays(30));
+        subscription.setStatus(SubscriptionStatus.ACTIVE);
+        subscription.setClient(Client.fromClientModel(clientModel));
+        subscription.setApplication(Application.fromApplicationModel(applicationModel));
+
+        SubscriptionModel subscriptionModel = subscriptionRepository.save(Subscription.toSubscriptionModel(subscription));
+
+        return new SubscriptionResponse(
+                subscriptionModel.getSubscriptionIdentificationCode(),
+                subscriptionModel.getPlanStart(),
+                subscriptionModel.getPlanEnd(),
+                subscriptionModel.getStatus().toString()
+        );
     }
 
     public Optional<SubscriptionModel> getSubscriptionById(Long subscriptionId) {

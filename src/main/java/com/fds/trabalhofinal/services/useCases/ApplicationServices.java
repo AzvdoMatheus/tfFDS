@@ -19,12 +19,8 @@ public class ApplicationServices {
     }
 
     public ApplicationModel createApplication(String appName, double monthlyCost) {
-        ApplicationModel newApplication = new ApplicationModel(0L, appName, monthlyCost);
+        ApplicationModel newApplication = new ApplicationModel(appName, monthlyCost);
         return appRepository.save(newApplication);
-    }
-
-    public void updateMonthlyCost(Long appId, double newMonthlyCost) {
-        appRepository.updateMonthlyCost(appId, newMonthlyCost);
     }
 
     public List<ApplicationModel> listAllApplications() {

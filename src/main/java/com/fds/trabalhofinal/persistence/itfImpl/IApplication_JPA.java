@@ -15,14 +15,13 @@ import java.util.stream.Collectors;
 @Service
 public class IApplication_JPA implements IAppRepository {
     private final IApplication_Rep applicationRep;
-
     public IApplication_JPA(IApplication_Rep applicationRep) {
         this.applicationRep = applicationRep;
     }
 
     @Override
     public List<ApplicationModel> findAll() {
-        return ((List<Application>) applicationRep.findAll()).stream()
+        return applicationRep.findAll().stream()
                 .map(Application::toApplicationModel)
                 .collect(Collectors.toList());
     }
@@ -37,14 +36,5 @@ public class IApplication_JPA implements IAppRepository {
         Application application = Application.fromApplicationModel(applicationModel);
         Application savedApplication = applicationRep.save(application);
         return Application.toApplicationModel(savedApplication);
-    }
-
-    @Override
-    public void updateMonthlyCost(Long id, double newMonthlyCost) {
-        Optional<Application> app = applicationRep.findById(id);
-        app.ifPresent(application -> {
-            application.setMonthlyCost(newMonthlyCost);
-            applicationRep.save(application);
-        });
     }
 }

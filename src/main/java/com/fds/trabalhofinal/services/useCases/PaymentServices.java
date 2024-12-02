@@ -22,18 +22,14 @@ public class PaymentServices {
         this.subscriptionRepository = subscriptionRepository;
     }
 
-    public PaymentModel registerPayment(Long subscriptionId, double pricePaid, double monthlyCost, String promotionalCode) {
-        SubscriptionModel subscription = subscriptionRepository.findById(subscriptionId)
-                .orElseThrow(() -> new IllegalArgumentException("Subscription not found."));
+    public PaymentModel registerPayment(double pricePaid, double monthlyCost, String promotionalCode) {
 
-        int extraDays = validatePromotionAndGetExtraDays(monthlyCost, pricePaid, promotionalCode);
-
-        LocalDate newEndDate = extendSubscriptionValidity(subscription, extraDays);
-
-        PaymentModel payment = new PaymentModel(subscriptionId, pricePaid, newEndDate, promotionalCode);
-        paymentRepository.save(payment);
-
-        return payment;
+        PaymentModel payment = new PaymentModel(
+                pricePaid,
+                LocalDate.now(),
+                promotionalCode
+        );
+        return paymentRepository.save(payment);
     }
 
 
@@ -48,15 +44,12 @@ public class PaymentServices {
         if ("PROMO_45".equalsIgnoreCase(promotionalCode) && pricePaid == monthlyCost) {
             return 45;
         }
-
         if ("ANNUAL_40_OFF".equalsIgnoreCase(promotionalCode) && pricePaid == (monthlyCost * 12 * 0.6)) {
             return 365;
         }
-
         if (pricePaid == monthlyCost) {
             return 30;
         }
-
         throw new IllegalArgumentException("Invalid payment amount or promotion.");
     }
 
@@ -69,7 +62,6 @@ public class PaymentServices {
         } else {
             subscription.setPlanEnd(currentDate.plusDays(extraDays));
         }
-
         subscriptionRepository.save(subscription);
         return subscription.getPlanEnd();
     }
